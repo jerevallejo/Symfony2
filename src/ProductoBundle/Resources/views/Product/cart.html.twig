@@ -1,43 +1,35 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-
-    <h1> Producto </h1>
-
-<div class="checkout-summary">
-  <div class="checkout-summary-title">
-    <h5>Your Order</h5>
-    <h5>2 Items</h5>
-
-{% for producto in productos %}
-
-  </div>
-
-  <div class="checkout-summary-item">
-    <img src="https://placeimg.com/100/80/any">
-    <div class="item-name">
-      <a>{{producto.getName()}}</a>
-      <p><span class="title">Stock:{{producto.getStock()}} </span>Blue</p>
-      <p><span class="title">precio: {{producto.getPrice()}} </span>M</p>
+  <div style="text-align: center;">
+  <div class="row column container-padded">
+  <div class="checkout-summary">
+      <div class="checkout-summary-title">
+        <h5>Su Pedido: </h5>
+        <h5>Items</h5>
     </div>
-    <div class="item-price">
-      <p class="title">$24.99</p>
-      <a href="#">Remove</a>
+
+    {% for producto in productos %}
+
+      <div class="checkout-summary-item">
+        <img src="https://placeimg.com/100/80/any">
+        <div class="item-name">
+          <a>{{producto.name}}</a>
+        </div>
+        <div class="item-price">
+          <p class="title">{{producto.price}}</p>
+            <a href="#">Remove</a>
+        </div>
     </div>
-  </div>
-  {%endfor%}
-  <div class="checkout-summary-details">
-    <div class="left">
-      <p><strong>Subtotal:</strong></p>
-      <p><strong>Tax:</strong></p>
-      <p><strong>Total:</strong></p>
-    </div>
+
+    {%endfor%}
+
     <div class="right">
       <p>$10.99</p>
-      <p>$2.00</p>
-      <p>$12.99</p>
     </div>
   </div>
-  <button class="button expanded">Proceed to Checkout</button>
+  <button class="button expanded">Proceder al Pago</button>
+</div>
 </div>
 
 {% endblock %}

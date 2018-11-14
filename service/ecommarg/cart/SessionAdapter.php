@@ -12,9 +12,9 @@ Class SessionAdapter implements SaveAdapterInterface
 	private $session;
 	private $bagName = null;
 
-	public function __construct(SessionInterface $session, $key = null){
+	public function __construct(SessionInterface $session, $key = null)
+	{
 		$bagName = null === $key ? self::BAG_NAME : $key;
-		
 		$bag = new AttributeBag($bagName);
 		$bag->setName($bagName);
 		$this->session=$session;
@@ -38,11 +38,12 @@ Class SessionAdapter implements SaveAdapterInterface
 
 	public function getAll()
 	{
-		return $this->session->getBag($this->bagName)->all();
-	}
-
-	public function replace($array)
-	{
-		return $this->session->replace($array);
+		$all= $this->session->getBag($this->bagName)->all();
+		//el & modifica el item directamente que se esta iterando
+		foreach ($all as &$item)
+		 {
+		 	$item = json_decode($item);
+		 } 
+		return $all;
 	}
 }

@@ -30,12 +30,8 @@ class ProductController extends Controller
     	{
     		throw new \Exception("Producto not found");
     	}
-    
         $cartService = $this->get('app.cart');
-
         $cartService->add($producto);
-
-        die();
     }
 
    /**
@@ -44,9 +40,8 @@ class ProductController extends Controller
     public function viewCartAction()
     {
         $cartService = $this->get('app.cart');
-        $productos =  $cartService->getAll();
-         return $this->render('ProductoBundle:Product:cart.html.twig',
-                                ['productos'=> $productos]);  
+        $products= $cartService->getAll();
+        return $this->render('ProductoBundle:Product:cart.html.twig', ['productos'=>$products]);
+
     }
 }
-
