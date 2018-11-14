@@ -23,6 +23,15 @@
 			return $this->get($id);
 		}
 
+		public function getAll()
+		{
+			return $this->adapter->getAll();
+		}
+
+		public function replace($array)
+		{
+			return $this->adapter->replace($array);
+		}
 	}
 
 
