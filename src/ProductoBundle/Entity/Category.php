@@ -3,7 +3,7 @@
 namespace ProductoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Command\Collections\ArrayColection;
 
 /**
  * Category
@@ -25,9 +25,25 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
+
+    /**
+     * @var ArrayColection
+     * @ORM\ManyToMany(targetEntity="Producto" , mappedBy="categorias")
+     * @ORM\JoinTable(name="product_categoy")
+     */
+    private $products=null;
+
+    public function __construct()
+    {
+        $this->products = new ArrayColection();
+    }
+    public function getProducts()
+    {
+        return $this->products;
+    }
     /**
      * Get id
      *
@@ -37,13 +53,13 @@ class Category
     {
         return $this->id;
     }
-  
+
     /**
      * Set name
      *
      * @param string $name
      *
-     * @return Producto
+     * @return Categoria
      */
     public function setName($name)
     {
@@ -61,23 +77,5 @@ class Category
     {
         return $this->name;
     }
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Producto", mappedBy="Categories")
-     * @ORM\JoinTable(name="Product_Category")
-     */
-
-    private $Products = null;
-
-    public function __construct()
-    {
-        $this->Products = new ArrayCollection();
-    }
-
-    public function getProducts()
-    {
-        return $this->Products;
-    }
-
 }
 

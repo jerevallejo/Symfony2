@@ -10,7 +10,6 @@ use ecommarg\cart\ProductoInterface as Product;
 		
 		public function getAll();
 
-		public function replace($array);
 	}
 
 

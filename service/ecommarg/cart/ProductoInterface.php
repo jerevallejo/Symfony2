@@ -1,5 +1,5 @@
 <?php 
-	namespace ecommarg\cart;
+namespace ecommarg\cart;
 
 	interface ProductoInterface extends \JsonSerializable
 	{
