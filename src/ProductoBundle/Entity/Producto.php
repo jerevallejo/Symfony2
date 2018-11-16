@@ -2,8 +2,9 @@
 
 namespace ProductoBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Command\Collections\ArrayColection;
+use Doctrine\Common\Collections\ArrayCollection;
 use ecommarg\cart\ProductInterface;
 
 /**
@@ -18,6 +19,7 @@ class Producto implements ProductInterface
     /**
      * @var int
      *
+     * @Assert\NotBlank
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -53,7 +55,7 @@ class Producto implements ProductInterface
     private $categorias=null;
     public function __construct()
     {
-        $this->categorias = new ArrayColection();
+        $this->categorias = new ArrayCollection();
     }
     /**
      * Get id
@@ -148,6 +150,11 @@ class Producto implements ProductInterface
                 'price' => $this->getPrice(),
                 'stock' => $this->getStock()
                 ];
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
 
