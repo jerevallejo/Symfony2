@@ -1,16 +1,15 @@
 <?php
 
-
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller as sfController;
 use Symfony\Component\HttpFoundation\Request;
 
-class DefaultController extends Controller
+class DefaultController extends sfController
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/" , name="homepage")
      */
     public function indexAction(Request $request)
     {
@@ -19,13 +18,12 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ));
     }
-     /**
+    /**
      * @Route("/test/{id}", name="testpage")
      */
-    public function testAction($id)
+    public function textAction($id)
     {
         var_dump($id);
         die();
     }
 }
-?>

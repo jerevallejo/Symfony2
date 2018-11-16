@@ -4,7 +4,7 @@ namespace ProductoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Command\Collections\ArrayColection;
-use ecommarg\cart\ProductoInterface;
+use ecommarg\cart\ProductInterface;
 
 /**
  * Producto
@@ -12,7 +12,7 @@ use ecommarg\cart\ProductoInterface;
  * @ORM\Table(name="producto")
  * @ORM\Entity(repositoryClass="ProductoBundle\Repository\ProductoRepository")
  */
-class Producto implements ProductoInterface
+class Producto implements ProductInterface
 {
     
     /**
@@ -55,7 +55,6 @@ class Producto implements ProductoInterface
     {
         $this->categorias = new ArrayColection();
     }
-
     /**
      * Get id
      *
@@ -137,12 +136,10 @@ class Producto implements ProductoInterface
     {
         return $this->stock;
     }
-
     public function getCategorias()
     {
         return $this->categorias;
     }
-
     public function jsonSerialize()
     {
         return [
@@ -153,5 +150,4 @@ class Producto implements ProductoInterface
                 ];
     }
 }
-
 
