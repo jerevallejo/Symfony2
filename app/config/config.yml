@@ -9,7 +9,7 @@ imports:
 parameters:
     locale: en
     cart_config:
-       buy_mode: "noajax"
+       buy_mode: "ajax"
 
 framework:
     #esi: ~
