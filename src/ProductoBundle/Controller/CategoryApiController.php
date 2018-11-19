@@ -37,6 +37,7 @@ class CategoryApiController extends Controller
      */
     public function newAction(Request $request)
     {
+        $errors = array();
         $category = new Category();
         $form = $this->createForm('ProductoBundle\Form\CategoryApiType', $category);
         $form->handleRequest($request);
@@ -52,22 +53,25 @@ class CategoryApiController extends Controller
             $em->flush();
 
             $response->setContent(json_encode($category));
-        }else{
-
-            $validator = $this->get('validator');
-            $errors = $validator->validate($category);
-
-            if (count($errors) > 0) {
-                $messages=[];
-
-                foreach ($errors as $violation) {
-                    $messages[$violation->getPropertyPath()][] = $violation->getMessage();
+        }else
+        {
+            /*
+            $errors = $form->getErrors();
+            foreach ($errors as $key => $error) 
+            {
+                $errors[] = $error->getMessage();
+            }*/
+            foreach ($form->getErrors() as $key => $error)
+            {
+                if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+                } else {
+                $errors[] = $error->getMessage();
                 }
-
-                $response->setContent(json_encode($messages));
-        	}
-
-        	$response->setStatusCode(400);
+            }
+            $response->setStatusCode(400);
+            $response->setContent(json_encode($errors));
+                
 
         }
 
