@@ -51,22 +51,25 @@ class ProductApiController extends Controller
             $em->persist($producto);
             $em->flush();
             $response->setContent(json_encode($producto));
-        }else{
-            $validator = $this->get('validator');
-            $errors = $validator->validate($producto);
-
-            if (count($errors) > 0) {
-                $messages = [];
-
-                foreach ($errors as $violation) {
-                    $messages[$violation->getPropertyPath()][] = $violation->getMessage();
+        }else
+        {
+            /*
+            $errors = $form->getErrors();
+            foreach ($errors as $key => $error) 
+            {
+                $errors[] = $error->getMessage();
+            }*/
+            foreach ($form->getErrors() as $key => $error)
+            {
+                if ($form->isRoot()) {
+                $errors['#'][] = $error->getMessage();
+                } else {
+                $errors[] = $error->getMessage();
                 }
-
-                $response->setContent(json_encode($messages));
             }
-
             $response->setStatusCode(400);
-
+            $response->setContent(json_encode($errors));
+                
         }
 
         return $response;
