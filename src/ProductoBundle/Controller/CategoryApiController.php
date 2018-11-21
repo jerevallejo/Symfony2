@@ -33,48 +33,54 @@ class CategoryApiController extends Controller
      * Creates a new category entity.
      *
      * @Route("categories/api/category/new", name="categories_api_category_new")
-     * @Method({"GET", "POST"})
+     * @Method({"POST"})
      */
-    public function newAction(Request $request)
-    {
-        $errors = array();
+    public function addAction(Request $r){
         $category = new Category();
-        $form = $this->createForm('ProductoBundle\Form\CategoryApiType', $category);
-        $form->handleRequest($request);
+        $form = $this->createForm(
+            'ProductBundle\Form\CategoryApiType',
+            $category,
+            [
+                'csrf_protection' => false
+            ]
+        );
 
-        $response= new Response();
-        $response->headers->add([
-                                    'Content-Type'=>'application/json'
-                                ]);
+        $form->bind($r);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $valid = $form->isValid();
+
+        $response = new Response();
+
+        if(false === $valid){
+            $response->setStatusCode(400);
+            $response->setContent(json_encode($this->getFormErrors($form)));
+
+            return $response;
+        }
+
+        if (true === $valid) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
-
             $response->setContent(json_encode($category));
-        }else
-        {
-            /*
-            $errors = $form->getErrors();
-            foreach ($errors as $key => $error) 
-            {
-                $errors[] = $error->getMessage();
-            }*/
-            foreach ($form->getErrors() as $key => $error)
-            {
-                if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-                } else {
-                $errors[] = $error->getMessage();
-                }
-            }
-            $response->setStatusCode(400);
-            $response->setContent(json_encode($errors));
-                
-
         }
 
         return $response;
+    }
+
+    public function getFormErrors($form){
+        $errors = [];
+
+        if (0 === $form->count()){
+            return $errors;
+        }
+
+        foreach ($form->all() as $child) {
+            if (!$child->isValid()) {
+                $errors[$child->getName()] = (string) $form[$child->getName()]->getErrors();
+            }
+        }
+
+        return $errors;
     }
 }

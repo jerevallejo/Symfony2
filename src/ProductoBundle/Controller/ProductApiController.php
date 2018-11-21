@@ -30,49 +30,62 @@ class ProductApiController extends Controller
 
 
     /**
-     * Creates a new producto entity.
-     *
-     * @Route("products/api/product/new", name="products_api_product_new")
-     * @Method("POST")
+     *@Route("/product/api/add", name="product_api_add")
+     *@Method("POST")
      */
-    public function newAction(Request $request)
-    {
-        $producto = new Producto();
-        $form = $this->createForm('ProductoBundle\Form\ProductoApiType', $producto);
-        $form->handleRequest($request);
+    public function addAction(Request $r){
+        $product = new Product();
+        $form = $this->createForm(
+            'ProductBundle\Form\ProductApiType',
+            $product,
+            [
+                'csrf_protection' => false
+            ]
+        );
 
-	    $response= new Response();
-	    $response->headers->add([
-			'Content-Type'=>'application/json'
-		]);
-	    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($producto);
-            $em->flush();
-            $response->setContent(json_encode($producto));
-        }else
-        {
-            /*
-            $errors = $form->getErrors();
-            foreach ($errors as $key => $error) 
-            {
-                $errors[] = $error->getMessage();
-            }*/
-            foreach ($form->getErrors() as $key => $error)
-            {
-                if ($form->isRoot()) {
-                $errors['#'][] = $error->getMessage();
-                } else {
-                $errors[] = $error->getMessage();
-                }
-            }
+        $form->bind($r);
+
+        $valid = $form->isValid();
+
+        $response = new Response();
+
+        if(false === $valid){
             $response->setStatusCode(400);
-            $response->setContent(json_encode($errors));
-                
+            $response->setContent(json_encode($this->getFormErrors($form)));
+
+            return $response;
+        }
+
+        if (true === $valid) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+            $response->setContent(json_encode($product));
         }
 
         return $response;
+    }
+
+
+
+
+    public function getFormErrors($form)
+    {
+        $errors = [];
+
+        if (0 === $form->count()){
+            return $errors;
+        }
+
+        foreach ($form->all() as $child) 
+        {
+            if (!$child->isValid())
+            {
+                $errors[$child->getName()] = (string) $form[$child->getName()]->getErrors();
+            }
+        }
+
+        return $errors;
     }
 
 }

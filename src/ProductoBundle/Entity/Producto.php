@@ -48,6 +48,7 @@ class Producto implements ProductInterface
 
     /**
      * @var arrayColection
+     *
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="products")
      * @ORM\JoinTable (name="producto_category")
      */
